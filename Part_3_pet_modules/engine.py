@@ -148,3 +148,12 @@ def train(model: torch.nn.Module,
                                                 
 
   return results
+
+# Import SummaryWriter from torch.utils.tensorboard
+from torch.utils.tensorboard import SummaryWriter
+
+def create_writer(experiment_name: str, model_name: str, extra: str = ""):
+    """Creates a SummaryWriter for TensorBoard logging."""
+    log_dir = f"runs/{experiment_name}_{model_name}_{extra}"
+    writer = SummaryWriter(log_dir=log_dir)
+    return writer
