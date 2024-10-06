@@ -97,7 +97,8 @@ def train(model: torch.nn.Module,
           optimizer: torch.optim.Optimizer,
           loss_fn: torch.nn.Module,
           epochs: int,
-          device: torch.device) -> Dict[str, List]:
+          device: torch.device,
+          writer=None) -> Dict[str, List]:
 
   # Create empty results dictionary
   results = {"train_loss": [],
@@ -133,5 +134,17 @@ def train(model: torch.nn.Module,
     results["train_acc"].append(train_acc.item() if isinstance(train_acc, torch.Tensor) else train_acc)
     results["test_loss"].append(test_loss.item() if isinstance(test_loss, torch.Tensor) else test_loss)
     results["test_acc"].append(test_acc.item() if isinstance(test_acc, torch.Tensor) else test_acc)
+
+    # Log to TensorBoard if a writer is provided
+    if writer:
+      writer.add_scalars(main_tag="Loss",
+                         tag_scalar_dict={"train_loss": train_loss,
+                                          "test_loss": test_loss},
+                         global_step=epoch)
+      writer.add_scalars(main_tag="Accuracy",
+                         tag_scalar_dict={"train_acc": train_acc,
+                                          "test_acc": test_acc},
+                         global_step=epoch)
+                                                
 
   return results
