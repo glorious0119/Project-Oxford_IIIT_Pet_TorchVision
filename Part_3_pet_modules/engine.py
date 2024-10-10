@@ -19,7 +19,11 @@ def train_step(model: torch.nn.Module,
   train_loss, train_acc = 0, 0
 
   # Loop through data loader data batches
-  for batch, (X, y) in enumerate(dataloader):
+  for batch, data in enumerate(dataloader):
+
+    print(f"Batch {batch}: data = {data}")  # Inspect the output
+
+    (X, y) = data
 
     # Send data to target device
     X, y = X.to(device), y.to(device)
